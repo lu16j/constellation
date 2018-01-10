@@ -1,12 +1,18 @@
 function rendezvous(me, form, partner, status) {
   form.on('submit', function() {
+    var mycode = me.trim().toLowerCase().split(/\s+/);
+    var partnercode = partner.val().trim().toLowerCase().split(/\s+/);
+    var url = mycode.toString() === partnercode.toString()
+              ? document.location.pathname.replace('/pair/', '/single/')
+              : document.location.pathname;
+    console.log(mycode, partnercode, url);
     try {
       $.ajax({
         type: 'POST',
-        url: document.location.pathname,
+        url: url,
         data: JSON.stringify({
-          me: me.trim().toLowerCase().split(/\s+/),
-          partner: partner.val().trim().toLowerCase().split(/\s+/)
+          me: mycode,
+          partner: partnercode
         }),
         contentType: 'application/json'
       }).done(function(responseJSON) {
