@@ -11,19 +11,34 @@ block content
   
   .row: .col-xs-12
     h3 Where are you sitting?
-      small  please click on a section
-    svg(width=306, height=160)
+      small#sectionhint  please click on a row
+    svg(width='612', height='320', transform='matrix(2,0,0,2,266,160)')
       style.
         .section { opacity: 0.5; fill: #BC6060; }
         .section:hover { opacity: 0.7; cursor: pointer; }
         .section:active { opacity: 1; }
         .section.selected { opacity: 0.9; }
-      path#F.section(d='M 50 40 l 50 20 l -8 20 l -50 -20 Z M 105 60 l 48 0 l 0 20 l -56 0 Z')
-      path#E.section(d='M 256 40 l -50 20 l 8 20 l 50 -20 Z M 153 60 l 48 0 l 8 20 l -56 0 Z')
-      path#D.section(d='M 90 85 l -50 -20 l -20 50 l 50 20 Z')
-      path#C.section(d='M 95 85 l -20 50 l 75 0 l 0 -50 Z')
-      path#B.section(d='M 156 85 l 55 0 l 20 50 l -75 0 Z')
-      path#A.section(d='M 216 85 l 50 -20 l 20 50 l -50 20 Z')
+      path#1L.section(d='M 42 50 c 33 14, 33 14, 68 20 l -2 8 c -32 -6, -32 -6, -68 -20 Z')
+      path#2L.section(d='M 40 60 c 34 14, 34 14, 70 20 l -2 8 c -34 -6, -34 -6, -70 -20 Z')
+      path#3L.section(d='M 38 70 c 35 14, 35 14, 72 20 l -2 8 c -36 -6, -36 -6, -72 -20 Z')
+      path#4L.section(d='M 36 80 c 36 14, 36 14, 74 20 l -2 8 c -38 -6, -38 -6, -74 -20 Z')
+      path#5L.section(d='M 34 90 c 37 14, 37 14, 76 20 l -2 8 c -39 -6, -39 -6, -76 -20 Z')
+      path#6L.section(d='M 32 100 c 38 14, 38 14, 78 20 l -2 8 c -40 -6, -40 -6, -78 -20 Z')
+      path#7L.section(d='M 30 110 c 39 14, 39 14, 80 20 l -2 8 c -41 -6, -41 -6, -80 -20 Z')
+      path#1M.section(d='M 110 70 c 40 1, 40 1, 80 0 l 2 8 c -42 1, -42 1, -84 0 Z')
+      path#2M.section(d='M 110 80 c 40 1, 40 1, 80 0 l 2 8 c -42 1, -42 1, -84 0 Z')
+      path#3M.section(d='M 110 90 c 40 1, 40 1, 80 0 l 2 8 c -42 1, -42 1, -84 0 Z')
+      path#4M.section(d='M 110 100 c 40 1, 40 1, 80 0 l 2 8 c -42 1, -42 1, -84 0 Z')
+      path#5M.section(d='M 110 110 c 40 1, 40 1, 80 0 l 2 8 c -42 1, -42 1, -84 0 Z')
+      path#6M.section(d='M 110 120 c 40 1, 40 1, 80 0 l 2 8 c -42 1, -42 1, -84 0 Z')
+      path#7M.section(d='M 110 130 c 40 1, 40 1, 80 0 l 2 8 c -42 1, -42 1, -84 0 Z')
+      path#1R.section(d='M 190 70 c 35 -6, 35 -6, 68 -20 l 2 8 c -33 14, -33 14, -68 20 Z')
+      path#2R.section(d='M 190 80 c 36 -6, 36 -6, 70 -20 l 2 8 c -34 14, -34 14, -70 20 Z')
+      path#3R.section(d='M 190 90 c 37 -6, 37 -6, 72 -20 l 2 8 c -35 14, -35 14, -72 20 Z')
+      path#4R.section(d='M 190 100 c 38 -6, 38 -6, 74 -20 l 2 8 c -36 14, -36 14, -74 20 Z')
+      path#5R.section(d='M 190 110 c 39 -6, 39 -6, 76 -20 l 2 8 c -37 14, -37 14, -76 20 Z')
+      path#6R.section(d='M 190 120 c 40 -6, 40 -6, 78 -20 l 2 8 c -38 14, -38 14, -78 20 Z')
+      path#7R.section(d='M 190 130 c 41 -6, 41 -6, 80 -20 l 2 8 c -39 14, -39 14, -80 20 Z')
       path#board(d='M 110 30 l 80 0 Z', stroke='black', stroke-width=3, stroke-linecap='round')
       g(font-size=15, font-family='sans-serif', fill='black', stroke='none', text-anchor='middle')
         text(x=150, y=50) Front
@@ -45,7 +60,11 @@ block content
   
   script.
     var project = !{JSON.stringify(project)};
+    var selected = false;
     $('.section').on('click', function onSectionSelect() {
+      selected = true;
+      setSectionHint($(this).attr('id'));
+
       var joincodebox = document.getElementById('partner');
       joincodebox.disabled = false;
       joincodebox.focus();
@@ -54,11 +73,44 @@ block content
       $(this).addClass('selected');
       
       $.ajax({
-        url: 'https://docs.google.com/forms/d/e/1FAIpQLSeaEH9itZ-6vi7PhLhjRzFSN1rlVJBn5Pb3QaXjUzuAWf6IXw/formResponse?'
+        url: 'https://docs.google.com/forms/d/e/1FAIpQLSf0zZ3NmWogrVuWDmuKPlWPh3Co9YU8WnZKTTbjv4H1mmTdKw/formResponse?'
           + $.param({
-            'entry.1593350312': project,
-            'entry.1454600059': authusername,
-            'entry.1297934788': this.id,
+            'entry.1016659103': project,
+            'entry.1331520105': authusername,
+            'entry.424427024': this.id,
           }),
       });
     });
+    $('.section').mouseover(function() {
+      if (!selected) setSectionHint($(this).attr('id'));
+    });
+    function setSectionHint(id) {
+      var row = id[0];
+      switch (row) {
+        case '1':
+          row += 'st';
+          break;
+        case '2':
+          row += 'nd';
+          break;
+        case '3':
+          row += 'rd';
+          break;
+        default:
+          row += 'th';
+          break;
+      }
+      var side = id[1];
+      switch (side) {
+        case 'L':
+          side = 'left';
+          break;
+        case 'R':
+          side = 'right';
+          break;
+        case 'M':
+          side = 'middle';
+          break;
+      }
+      $('#sectionhint').text(' ' + row + ' row ' + side);
+    }
