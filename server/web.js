@@ -145,6 +145,9 @@ exports.createFrontend = function createFrontend(config, db) {
     let token = db.usernameToken(res.locals.authusername);
 
     if (req.params.project == setupproject) {
+      db.recordSetup(me, function(err) {
+        if (err) { log.warn({ err }, 'Error recording user setup'); }
+      });
       paired.emit(req.params.userid, { me, token });
       return res.send({ redirect: '/setup-done' });
     }
